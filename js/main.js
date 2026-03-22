@@ -1,4 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
+    const API_BASE = (window.location.hostname === '127.0.0.1' && window.location.port !== '3000') || window.location.protocol === 'file:' ? 'http://localhost:3000' : '';
+
     // 1. Initialize Map (Leaflet)
     // Coords approximately near a forest area in India (e.g., Bandipur/Mudumalai region)
     const map = L.map('map').setView([11.6603, 76.6260], 10);
@@ -28,7 +30,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Fetch and display existing reports from MongoDB
     async function loadReports() {
         try {
-            const res = await fetch('/api/reports');
+            const res = await fetch(`${API_BASE}/api/reports`);
             if (res.ok) {
                 const dbIncidents = await res.json();
                 dbIncidents.forEach(inc => {
@@ -275,7 +277,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 
                 // Save to MongoDB
                 try {
-                    await fetch('/api/reports', {
+                    await fetch(`${API_BASE}/api/reports`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
