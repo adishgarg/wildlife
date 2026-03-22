@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WildGuard | Wildlife Awareness & Protection</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center gap-2" href="#">
+                <i class="fa-solid fa-leaf text-sage"></i> WildGuard
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <i class="fa-solid fa-bars" style="color: var(--sage-light);"></i>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav gap-3">
+                    <li class="nav-item"><a class="nav-link active" href="#awareness">Awareness</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#map-section">Live Map</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#dashboard">Data</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#tips">Tips</a></li>
+                    <li class="nav-item ms-lg-2">
+                        <a class="btn btn-accent px-4" href="#report">Report Incident</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero / Awareness Section -->
+    <section id="awareness" class="hero-section">
+        <div class="hero-bg"></div>
+        <div class="hero-gradient"></div>
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-7 mb-5 mb-lg-0">
+                    <span class="badge bg-glass text-sage border mb-3 px-3 py-2 rounded-pill" style="border-color: var(--glass-border) !important;">
+                        <i class="fa-solid fa-shield-cat me-2"></i> Protecting India's Wildlife
+                    </span>
+                    <h1 class="hero-title">Coexistence <br>Starts With Awareness.</h1>
+                    <p class="hero-subtitle">Every year, hundreds of endangered animals lose their lives to road accidents and organized poaching. Highways passing through dense forests create fragmented habitats, leading to inevitable human-wildlife encounters.</p>
+                    
+                    <div class="d-flex gap-3 flex-wrap">
+                        <button class="btn btn-primary-custom" id="didYouKnowBtn">
+                            <i class="fa-solid fa-lightbulb me-2"></i> Did you know?
+                        </button>
+                        <a href="#report" class="btn btn-outline-light text-sage border-sage rounded-pill px-4 fw-medium d-flex align-items-center">
+                            Save a Life
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Stats Snippet -->
+                <div class="col-lg-5">
+                    <div class="row g-4">
+                        <div class="col-6">
+                            <div class="glass-panel stat-card tint-terra">
+                                <i class="fa-solid fa-car-burst text-accent fs-2 mb-3"></i>
+                                <div class="stat-number text-accent">1k+</div>
+                                <div class="stat-label">Yearly Accidents</div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="glass-panel stat-card tint-gold">
+                                <i class="fa-solid fa-paw text-gold fs-2 mb-3"></i>
+                                <div class="stat-number text-gold">30%</div>
+                                <div class="stat-label">Decline in species</div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="glass-panel tint-teal p-4 d-flex align-items-center gap-3">
+                                <div class="flex-shrink-0">
+                                    <img src="images/habitat_fragmentation.png" class="rounded-circle border border-2 border-gold" width="80" height="80" alt="Highway through forest" style="object-fit: cover;">
+                                </div>
+                                <div>
+                                    <h5 class="mb-1 text-gold">Habitat Fragmentation</h5>
+                                    <p class="mb-0 text-white small">Road networks separate animal families and crucial water sources, forcing deadly crossings.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Did you know Toast -->
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div id="factToast" class="toast custom-toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <i class="fa-solid fa-bolt text-accent me-2"></i>
+                <strong class="me-auto">Wild Fact</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body">
+                <span id="factText">Did you know? Fun fact here.</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Live Map & AI Prediction Section -->
+    <section id="map-section" class="section-padding" style="background-color: rgba(26, 54, 34, 0.2);">
+        <div class="container">
+            <h2 class="section-title">Wildlife Activity Map</h2>
+            <div class="row g-4">
+                <div class="col-lg-8 border">
+                    <!-- Map Container -->
+                    <div class="glass-panel p-2">
+                        <div id="map"></div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <!-- AI Prediction Card -->
+                    <div class="glass-panel ai-card p-4 h-100 d-flex flex-column justify-content-center">
+                        <span class="ai-badge">AI Powered ✨</span>
+                        <div class="mb-4">
+                            <span class="pulse-dot"></span>
+                            <span class="text-accent fw-bold text-uppercase tracking-wider">High Risk Zone Detected</span>
+                        </div>
+                        <h4 class="text-white mb-3">NH-76x Forest Corridor</h4>
+                        <p class=" mb-4">Our AI prediction model analyzes historical accident data, seasonal migration patterns, and time of day.</p>
+                        
+                        <div class="p-3 rounded" style="background: rgba(0,0,0,0.2);">
+                            <div class="d-flex justify-content-between mb-2">
+                                <span class="text-sage">Current Risk Level:</span>
+                                <span class="text-accent fw-bold">Severe (Night)</span>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <span class="text-sage">AI Suggestion:</span>
+                                <span class="text-white">Impose 30km/h limit</span>
+                            </div>
+                        </div>
+                        
+                        <p class="mt-4 small tex">* AI suggests this road segment is currently high-risk due to recent elephant herd movements detected in the area.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Data Dashboard Section -->
+    <section id="dashboard" class="section-padding">
+        <div class="container">
+            <h2 class="section-title">Incident Dashboard</h2>
+            <div class="row g-4 justify-content-center">
+                <div class="col-lg-6">
+                    <div class="glass-panel tint-teal p-4 h-100">
+                        <h5 class="text-center mb-4 text-teal">Accidents per Month (2025)</h5>
+                        <div class="chart-container">
+                            <canvas id="accidentsChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-5">
+                    <div class="glass-panel tint-gold p-4 h-100">
+                        <h5 class="text-center mb-4 text-gold">Most Affected Species</h5>
+                        <div class="chart-container">
+                            <canvas id="animalsChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Report & Tips Section -->
+    <section id="report" class="section-padding" style="background-color: rgba(26, 54, 34, 0.2);">
+        <div class="container">
+            <div class="row g-5">
+                <!-- Report Form -->
+                <div class="col-lg-5">
+                    <h2 class="mb-4 text-sage-light">🚨 Report an Incident</h2>
+                    <p class="text-white mb-4">Your report helps us map risky zones and dispatch rapid response teams for injured animals.</p>
+                    
+                    <div class="glass-panel p-4 p-md-5">
+                        <form id="reportForm">
+                            <div class="mb-3">
+                                <label class="form-label text-sage">Location 📍</label>
+                                <div class="input-group position-relative">
+                                    <input type="text" id="reportLocation" class="form-control" placeholder="E.g., Highway NH-4, near milestone 12" autocomplete="off" required>
+                                    <button class="btn btn-outline-light text-sage border border-secondary" type="button" id="getLocationBtn" title="Use current location">
+                                        <i class="fa-solid fa-location-crosshairs"></i>
+                                    </button>
+                                    <ul id="locationSuggestions" class="dropdown-menu w-100 shadow-sm" style="display: none; position: absolute; top: 100%; z-index: 1050; max-height: 220px; overflow-y: auto; background: var(--secondary-dark); border-color: var(--sage); padding: 0;"></ul>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label text-sage">Incident Type</label>
+                                <select id="reportType" class="form-select custom-select" required>
+                                    <option value="" disabled selected>Select an option...</option>
+                                    <option value="accident">Road Accident (Vehicle)</option>
+                                    <option value="injured">Injured Animal Sighting</option>
+                                    <option value="poaching">Suspected Poaching Activity</option>
+                                    <option value="movement">Safe Wildlife Crossing</option>
+                                </select>
+                            </div>
+                            <div class="mb-4">
+                                <label class="form-label text-sage">Upload Photo 📸 <span class="small text-muted">(Optional)</span></label>
+                                <input type="file" class="form-control" accept="image/*">
+                            </div>
+                            <button type="submit" id="submitReport" class="btn btn-accent w-100 py-3 rounded-3 fs-5">
+                                Submit Alert
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Tips -->
+                <div class="col-lg-7" id="tips">
+                    <h2 class="mb-4 text-sage-light">🛡️ Prevention Guides</h2>
+                    <p class="text-white mb-4">Small behavioral changes save countless lives. Knowing what to do makes a difference.</p>
+                    
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <div class="glass-panel tip-card p-4 tint-teal">
+                                <i class="fa-solid fa-car-side tip-icon text-teal"></i>
+                                <h4 class="mb-3 text-white">For Drivers</h4>
+                                <ul class="list-unstyled text-white ps-0">
+                                    <li class="mb-2"><i class="fa-solid fa-angles-right text-teal me-2"></i><strong>Respect Speed Limits:</strong> Maintain 30-40km/h in forest zones.</li>
+                                    <li class="mb-2"><i class="fa-solid fa-angles-right text-teal me-2"></i><strong>Night Driving:</strong> Avoid high-beams; animals freeze like headlights deer.</li>
+                                    <li class="mb-2"><i class="fa-solid fa-angles-right text-teal me-2"></i><strong>No Honking:</strong> Loud noises disorient wildlife.</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="glass-panel tip-card p-4 tint-terra">
+                                <i class="fa-solid fa-person-hiking tip-icon text-accent"></i>
+                                <h4 class="mb-3 text-white">For the Public</h4>
+                                <ul class="list-unstyled text-white ps-0">
+                                    <li class="mb-2"><i class="fa-solid fa-angles-right text-accent me-2"></i><strong>Don't Crowd:</strong> If you see an injured animal, give it space.</li>
+                                    <li class="mb-2"><i class="fa-solid fa-angles-right text-accent me-2"></i><strong>Do NOT treat:</strong> Wild animals carry diseases. Call the authorities.</li>
+                                    <li class="mb-2"><i class="fa-solid fa-angles-right text-accent me-2"></i><strong>Document Safely:</strong> Note location and take a photo from afar.</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-12 mt-4">
+                            <div class="glass-panel p-4 d-flex align-items-center justify-content-between" style="border-left: 4px solid var(--sage);">
+                                <div>
+                                    <h5 class="mb-1 text-white">Emergency Forest Department</h5>
+                                    <p class="mb-0 text-white"><strong>Toll-free:</strong> 1800-425-WILD</p>
+                                </div>
+                                <i class="fa-solid fa-phone-volume fs-2 text-sage"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-4 text-center">
+        <div class="container text-muted">
+            <p class="mb-0">© 2026 WildGuard. Built for Wildlife Awareness.</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap & Plugins JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

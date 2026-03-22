@@ -1,0 +1,317 @@
+:root {
+  --primary-dark: #112015; /* Deep forest base */
+  --secondary-dark: #1a3622; /* Lighter forest */
+  --sage: #879f82;
+  --sage-light: #b5cfae;
+  --text-main: #edf2ed;
+  --text-muted: #abb8b0;
+  
+  /* Richer Earth & Nature Accents */
+  --accent: #E07A5F; /* Terracotta / Alert */
+  --gold:   #F2CC8F; /* Sun / Highlight */
+  --teal:   #4A827F; /* Deep Lake / Calm */
+  --amber:  #DE8F59; /* Soft Orange */
+
+  --accent-glow: rgba(224, 122, 95, 0.4);
+  --glass-bg: rgba(26, 54, 34, 0.5);
+  --glass-border: rgba(135, 159, 130, 0.25);
+}
+
+body {
+  background-color: var(--primary-dark);
+  color: var(--text-main);
+  font-family: 'Outfit', 'Inter', sans-serif;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 700;
+  color: var(--sage-light);
+}
+
+/* Glassmorphism Classes */
+.glass-panel {
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+/* Custom Navbar */
+.navbar {
+  background: rgba(17, 32, 21, 0.85);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--glass-border);
+}
+.navbar-brand {
+  color: var(--sage-light) !important;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+.nav-link {
+  color: var(--text-main) !important;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+.nav-link:hover, .nav-link.active {
+  color: var(--sage-light) !important;
+}
+
+/* Hero Section */
+.hero-section {
+  padding: 140px 0 80px;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+.hero-bg {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: url('https://images.unsplash.com/photo-1542304918-a61d15fc0a9e?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80') center/cover no-repeat;
+  opacity: 0.15;
+  z-index: -1;
+}
+/* A subtle gradient overlay */
+.hero-gradient {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: linear-gradient(180deg, rgba(17,32,21,0) 0%, var(--primary-dark) 100%);
+  z-index: -1;
+}
+
+.hero-title {
+  font-size: 4rem;
+  line-height: 1.1;
+  margin-bottom: 1.5rem;
+  background: linear-gradient(90deg, var(--gold), var(--sage-light));
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.hero-subtitle {
+  font-size: 1.25rem;
+  color: var(--text-muted);
+  margin-bottom: 2rem;
+}
+
+/* Stats Cards */
+.stat-card {
+  padding: 2rem;
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.stat-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+}
+.stat-number {
+  font-size: 3rem;
+  font-weight: 800;
+  color: var(--accent);
+  margin-bottom: 0.5rem;
+}
+.stat-label {
+  font-size: 1.1rem;
+  color: var(--sage);
+}
+
+/* Buttons */
+.btn-primary-custom {
+  background: var(--gold);
+  color: var(--primary-dark);
+  border: none;
+  font-weight: 600;
+  padding: 0.8rem 2rem;
+  border-radius: 50px;
+  transition: all 0.3s ease;
+}
+.btn-primary-custom:hover {
+  background: #FFE3B3;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(242, 204, 143, 0.3);
+}
+.btn-accent {
+  background: var(--accent);
+  color: white;
+  border: none;
+  font-weight: 600;
+  padding: 0.8rem 2rem;
+  border-radius: 50px;
+  transition: all 0.3s ease;
+}
+.btn-accent:hover {
+  background: #e68a68;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px var(--accent-glow);
+}
+
+/* Sections General */
+.section-padding {
+  padding: 100px 0;
+}
+.section-title {
+  margin-bottom: 3rem;
+  text-align: center;
+  position: relative;
+}
+.section-title::after {
+  content: '';
+  width: 60px;
+  height: 4px;
+  background: var(--sage);
+  display: block;
+  margin: 1rem auto 0;
+  border-radius: 2px;
+}
+
+/* Live Map & AI Prediction */
+#map {
+  height: 500px;
+  width: 100%;
+  border-radius: 16px;
+  z-index: 1; /* Keep Leaflet controls accessible */
+}
+
+.ai-card {
+  border-left: 4px solid var(--accent);
+  position: relative;
+  overflow: hidden;
+}
+.ai-badge {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: rgba(224, 122, 95, 0.2);
+  color: var(--accent);
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  border: 1px solid var(--accent);
+}
+.pulse-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  background: var(--accent);
+  border-radius: 50%;
+  margin-right: 8px;
+  box-shadow: 0 0 0 0 var(--accent-glow);
+  animation: pulse 1.5s infinite;
+}
+@keyframes pulse {
+  0% { transform: scale(0.95); box-shadow: 0 0 0 0 var(--accent-glow); }
+  70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(224, 122, 95, 0); }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(224, 122, 95, 0); }
+}
+
+/* Color Utilities */
+.text-accent  { color: var(--accent) !important; }
+.text-gold    { color: var(--gold) !important; }
+.text-teal    { color: var(--teal) !important; }
+.text-amber   { color: var(--amber) !important; }
+
+/* Tint Modifiers */
+.glass-panel.tint-gold {
+  background: rgba(242, 204, 143, 0.08);
+  border-color: rgba(242, 204, 143, 0.25);
+}
+.glass-panel.tint-teal {
+  background: rgba(74, 130, 127, 0.15);
+  border-color: rgba(74, 130, 127, 0.3);
+}
+.glass-panel.tint-terra {
+  background: rgba(224, 122, 95, 0.08);
+  border-color: rgba(224, 122, 95, 0.25);
+}
+
+/* Dashboard */
+.chart-container {
+  position: relative;
+  height: 300px;
+  width: 100%;
+}
+
+/* Report Form */
+.form-control, .form-select {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--glass-border);
+  color: var(--text-main);
+  border-radius: 10px;
+  padding: 0.8rem 1rem;
+}
+.form-control:focus, .form-select:focus {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--sage);
+  color: var(--text-main);
+  box-shadow: 0 0 0 0.25rem rgba(135, 159, 130, 0.25);
+}
+.form-control::placeholder {
+  color: var(--text-muted);
+}
+/* Fix for datalist dropdowns and select options in dark mode */
+option {
+  background: var(--secondary-dark);
+  color: var(--text-main);
+}
+
+/* Toast Container */
+.toast-container {
+  z-index: 1060;
+}
+.custom-toast {
+  background: var(--secondary-dark);
+  border: 1px solid var(--sage);
+  color: var(--text-main);
+}
+.custom-toast .toast-header {
+  background: rgba(135, 159, 130, 0.1);
+  color: var(--sage-light);
+  border-bottom: 1px solid var(--glass-border);
+}
+.custom-toast .btn-close {
+  filter: invert(1) grayscale(100%) brightness(200%);
+}
+
+/* Prevention Tips */
+.tip-icon {
+  font-size: 2.5rem;
+  color: var(--sage-light);
+  margin-bottom: 1rem;
+}
+.tip-card {
+  height: 100%;
+}
+
+/* Footer */
+footer {
+  background: #08120b;
+  border-top: 1px solid var(--glass-border);
+}
+
+/* Leaflet Popup Reskin */
+.leaflet-popup-content-wrapper, .leaflet-popup-tip {
+  background: var(--secondary-dark);
+  color: var(--text-main);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  border: 1px solid var(--glass-border);
+}
+.leaflet-popup-content {
+  color: var(--text-main);
+  font-family: inherit;
+}
+.leaflet-popup-content b {
+  color: var(--gold);
+}
+.leaflet-popup-close-button {
+  color: var(--sage) !important;
+}
+.leaflet-popup-close-button:hover {
+  color: var(--accent) !important;
+}
