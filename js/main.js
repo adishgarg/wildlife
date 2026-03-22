@@ -28,7 +28,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Fetch and display existing reports from MongoDB
     async function loadReports() {
         try {
-            const res = await fetch('http://localhost:3000/api/reports');
+            const res = await fetch('/api/reports');
             if (res.ok) {
                 const dbIncidents = await res.json();
                 dbIncidents.forEach(inc => {
@@ -275,7 +275,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 
                 // Save to MongoDB
                 try {
-                    await fetch('http://localhost:3000/api/reports', {
+                    await fetch('/api/reports', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
