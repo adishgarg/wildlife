@@ -6,8 +6,11 @@
       "use": "@vercel/node"
     },
     {
-      "src": "index.html",
-      "use": "@vercel/static"
+      "src": "**/*.{html,css,js,png,jpg,jpeg,gif,svg,ico,webp}",
+      "use": "@vercel/static",
+      "config": {
+        "exclude": ["api/**", "node_modules/**", "server.js", "models/**"]
+      }
     }
   ],
   "routes": [
@@ -16,8 +19,12 @@
       "dest": "/api/index.js"
     },
     {
-      "src": "/(.*)",
+      "src": "/(.*\\.(css|js|png|jpg|jpeg|gif|svg|ico|webp))",
       "dest": "/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/index.html"
     }
   ]
 }
