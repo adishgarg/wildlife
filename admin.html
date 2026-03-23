@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WildGuard | Admin Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* ── Layout ── */
+        .admin-layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* ── Sidebar ── */
+        .admin-sidebar {
+            width: 260px;
+            min-width: 260px;
+            background: rgba(8, 18, 11, 0.95);
+            border-right: 1px solid var(--glass-border);
+            display: flex;
+            flex-direction: column;
+            padding: 1.5rem 0;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+        }
+        .sidebar-logo {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: var(--sage-light);
+            padding: 0 1.5rem 1.5rem;
+            border-bottom: 1px solid var(--glass-border);
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+        .sidebar-section-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--text-muted);
+            padding: 1.5rem 1.5rem 0.5rem;
+            font-weight: 600;
+        }
+        .admin-nav-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1.5rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
+            border-left: 3px solid transparent;
+        }
+        .admin-nav-link:hover { color: var(--sage-light); background: rgba(135,159,130,0.06); }
+        .admin-nav-link.active { color: var(--sage-light); border-left-color: var(--sage); background: rgba(135,159,130,0.1); }
+        .admin-nav-link i { width: 18px; text-align: center; }
+        .sidebar-bottom {
+            margin-top: auto;
+            padding: 1.5rem;
+            border-top: 1px solid var(--glass-border);
+        }
+        .sidebar-user {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+        .sidebar-avatar {
+            width: 36px; height: 36px;
+            background: linear-gradient(135deg, var(--sage), var(--teal));
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 700; font-size: 0.85rem;
+            color: var(--primary-dark);
+            flex-shrink: 0;
+        }
+
+        /* ── Main Content ── */
+        .admin-main {
+            flex: 1;
+            overflow-y: auto;
+            background: var(--primary-dark);
+        }
+        .admin-topbar {
+            padding: 1.25rem 2rem;
+            background: rgba(8,18,11,0.7);
+            border-bottom: 1px solid var(--glass-border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .admin-content { padding: 2rem; }
+
+        /* ── Sections ── */
+        .admin-section { display: none; }
+        .admin-section.active { display: block; }
+        .section-header { margin-bottom: 1.75rem; }
+        .section-header h2 { margin: 0; font-size: 1.5rem; }
+        .section-header p { color: var(--text-muted); margin: 0.25rem 0 0; font-size: 0.9rem; }
+
+        /* ── Stat Cards ── */
+        .stat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1.25rem; margin-bottom: 2rem; }
+        .admin-stat-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            transition: transform 0.2s;
+        }
+        .admin-stat-card:hover { transform: translateY(-3px); }
+        .stat-card-icon {
+            width: 44px; height: 44px;
+            border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+        }
+        .stat-card-value { font-size: 2rem; font-weight: 800; line-height: 1; color: var(--sage-light); }
+        .stat-card-label { color: var(--text-muted); font-size: 0.85rem; margin-top: 0.4rem; }
+
+        /* ── Charts Grid ── */
+        .charts-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 1.25rem; margin-bottom: 1.25rem; }
+        .chart-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 1.5rem;
+        }
+        .chart-card h5 { font-size: 0.95rem; color: var(--sage-light); margin-bottom: 1.25rem; font-weight: 600; }
+        .chart-wrap { position: relative; height: 240px; }
+
+        /* ── Activity Feed ── */
+        .activity-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 1.5rem;
+        }
+        .activity-card h5 { font-size: 0.95rem; color: var(--sage-light); margin-bottom: 1.25rem; font-weight: 600; }
+        .activity-item {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--glass-border);
+        }
+        .activity-item:last-child { border: none; padding-bottom: 0; }
+        .activity-icon { font-size: 1.5rem; line-height: 1; }
+        .badge-type { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; }
+
+        /* ── Reports Table ── */
+        .table-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+        .table-card-header {
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid var(--glass-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .table-card-header h5 { margin: 0; font-size: 0.95rem; color: var(--sage-light); font-weight: 600; }
+        .admin-table { width: 100%; border-collapse: collapse; }
+        .admin-table th {
+            padding: 0.85rem 1.5rem;
+            text-align: left;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            border-bottom: 1px solid var(--glass-border);
+            font-weight: 600;
+        }
+        .admin-table td { padding: 1rem 1.5rem; border-bottom: 1px solid rgba(135,159,130,0.08); }
+        .admin-table tr:last-child td { border: none; }
+        .admin-table tr { transition: background 0.15s; }
+        .admin-table tr:hover td { background: rgba(135,159,130,0.04); }
+        .mono-id { font-family: monospace; color: var(--text-muted); font-size: 0.85rem; }
+        .type-badge {
+            display: inline-block;
+            padding: 0.2rem 0.65rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: capitalize;
+        }
+        .type-accident, .type-injured { background: rgba(224,122,95,0.15); color: #f1a08a; }
+        .type-poaching { background: rgba(222,143,89,0.15); color: #f0b07a; }
+        .type-movement, .type-animal { background: rgba(74,130,127,0.2); color: #7fc9c6; }
+
+        .btn-action {
+            border: none; background: none; cursor: pointer;
+            padding: 0.4rem 0.6rem; border-radius: 8px;
+            transition: all 0.2s;
+        }
+        .btn-delete { color: var(--accent); }
+        .btn-delete:hover { background: rgba(224,122,95,0.15); }
+
+        .table-footer {
+            padding: 1rem 1.5rem;
+            border-top: 1px solid var(--glass-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        .page-btn {
+            border: 1px solid var(--glass-border);
+            background: transparent;
+            color: var(--text-muted);
+            width: 36px; height: 36px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        .page-btn:hover, .page-btn.active { background: var(--sage); color: var(--primary-dark); border-color: var(--sage); }
+
+        /* ── Badge pill for admin ── */
+        .admin-badge {
+            font-size: 0.65rem;
+            background: rgba(224,122,95,0.2);
+            color: var(--accent);
+            padding: 2px 8px;
+            border-radius: 20px;
+            border: 1px solid rgba(224,122,95,0.3);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 768px) {
+            .admin-sidebar { width: 0; min-width: 0; overflow: hidden; }
+            .charts-grid { grid-template-columns: 1fr; }
+            .admin-content { padding: 1.25rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="admin-layout">
+
+    <!-- Sidebar -->
+    <aside class="admin-sidebar">
+        <div class="sidebar-logo">
+            <i class="fa-solid fa-leaf text-sage"></i> WildGuard
+            <span class="admin-badge ms-auto">Admin</span>
+        </div>
+
+        <div class="sidebar-section-label">Main</div>
+        <a href="#" class="admin-nav-link" data-section="overview">
+            <i class="fa-solid fa-chart-line"></i> Overview
+        </a>
+        <a href="#" class="admin-nav-link" data-section="analytics">
+            <i class="fa-solid fa-chart-pie"></i> Analytics
+        </a>
+        <a href="#" class="admin-nav-link" data-section="reports">
+            <i class="fa-solid fa-flag"></i> Reports
+        </a>
+
+        <div class="sidebar-section-label">System</div>
+        <a href="/" class="admin-nav-link">
+            <i class="fa-solid fa-globe"></i> Public Site
+        </a>
+
+        <div class="sidebar-bottom">
+            <div class="sidebar-user">
+                <div class="sidebar-avatar" id="sidebarAvatar">A</div>
+                <div>
+                    <div style="font-weight:600;font-size:0.9rem;color:var(--sage-light);" id="adminUsername">Admin</div>
+                    <div style="font-size:0.75rem;color:var(--text-muted);">Administrator</div>
+                </div>
+            </div>
+            <button class="btn btn-outline-secondary w-100 rounded-3" id="logoutBtn" style="font-size:0.85rem;">
+                <i class="fa-solid fa-arrow-right-from-bracket me-2"></i>Logout
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main -->
+    <div class="admin-main">
+        <div class="admin-topbar">
+            <div>
+                <h5 class="mb-0 text-sage-light fw-bold" id="topbarTitle">Overview</h5>
+            </div>
+            <div class="d-flex align-items-center gap-3">
+                <span style="color:var(--text-muted);font-size:0.85rem;">
+                    <i class="fa-regular fa-clock me-1"></i>
+                    Auto-refreshes every 60s
+                </span>
+                <span class="pulse-dot"></span>
+            </div>
+        </div>
+
+        <div class="admin-content">
+
+            <!-- ── OVERVIEW Section ── -->
+            <div class="admin-section" id="overview">
+                <div class="section-header">
+                    <h2>Dashboard Overview</h2>
+                    <p>Real-time summary of all wildlife incident data</p>
+                </div>
+
+                <!-- Stat Cards -->
+                <div class="stat-grid">
+                    <div class="admin-stat-card">
+                        <div class="stat-card-icon" style="background:rgba(135,159,130,0.15);">
+                            <i class="fa-solid fa-flag" style="color:var(--sage);"></i>
+                        </div>
+                        <div class="stat-card-value" id="statTotalReports">—</div>
+                        <div class="stat-card-label">Total Reports</div>
+                    </div>
+                    <div class="admin-stat-card">
+                        <div class="stat-card-icon" style="background:rgba(74,130,127,0.15);">
+                            <i class="fa-solid fa-users" style="color:var(--teal);"></i>
+                        </div>
+                        <div class="stat-card-value" id="statTotalUsers">—</div>
+                        <div class="stat-card-label">Registered Users</div>
+                    </div>
+                    <div class="admin-stat-card">
+                        <div class="stat-card-icon" style="background:rgba(224,122,95,0.15);">
+                            <i class="fa-solid fa-triangle-exclamation" style="color:var(--accent);"></i>
+                        </div>
+                        <div class="stat-card-value" id="statAccidents">—</div>
+                        <div class="stat-card-label">Accidents & Injured</div>
+                    </div>
+                    <div class="admin-stat-card">
+                        <div class="stat-card-icon" style="background:rgba(222,143,89,0.15);">
+                            <i class="fa-solid fa-crosshairs" style="color:var(--amber);"></i>
+                        </div>
+                        <div class="stat-card-value" id="statPoaching">—</div>
+                        <div class="stat-card-label">Poaching Reports</div>
+                    </div>
+                </div>
+
+                <!-- Overview Charts Row -->
+                <div class="charts-grid">
+                    <div class="chart-card">
+                        <h5><i class="fa-solid fa-chart-line me-2 text-sage"></i>Reports Over Last 6 Months</h5>
+                        <div class="chart-wrap"><canvas id="chartMonthly"></canvas></div>
+                    </div>
+                    <div class="chart-card">
+                        <h5><i class="fa-solid fa-chart-pie me-2 text-gold"></i>By Incident Type</h5>
+                        <div class="chart-wrap"><canvas id="chartType"></canvas></div>
+                    </div>
+                </div>
+
+                <!-- Activity Feed -->
+                <div class="activity-card">
+                    <h5><i class="fa-solid fa-bolt me-2 text-accent"></i>Recent Activity</h5>
+                    <div id="activityFeed">
+                        <p class="text-muted text-center py-3">Loading...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ── ANALYTICS Section ── -->
+            <div class="admin-section" id="analytics">
+                <div class="section-header">
+                    <h2>Analytics</h2>
+                    <p>Deep-dive into incident patterns and distributions</p>
+                </div>
+
+                <div class="row g-4">
+                    <div class="col-lg-8">
+                        <div class="chart-card">
+                            <h5><i class="fa-solid fa-chart-line me-2 text-sage"></i>Monthly Trend</h5>
+                            <div style="position:relative;height:320px;"><canvas id="chartMonthly2"></canvas></div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="chart-card h-100">
+                            <h5><i class="fa-solid fa-chart-pie me-2 text-gold"></i>Incident Types</h5>
+                            <div style="position:relative;height:320px;"><canvas id="chartType2"></canvas></div>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="chart-card">
+                            <h5><i class="fa-solid fa-chart-bar me-2 text-teal"></i>Reports by Category</h5>
+                            <div style="position:relative;height:260px;"><canvas id="chartBar"></canvas></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ── REPORTS Section ── -->
+            <div class="admin-section" id="reports">
+                <div class="section-header">
+                    <h2>All Reports</h2>
+                    <p>Browse, filter, and manage submitted incident reports</p>
+                </div>
+
+                <div class="table-card">
+                    <div class="table-card-header">
+                        <h5><i class="fa-solid fa-table me-2"></i>Incident Reports</h5>
+                    </div>
+                    <div style="overflow-x:auto;">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Location</th>
+                                    <th>Type</th>
+                                    <th>Coordinates</th>
+                                    <th>Date</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="reportsTableBody">
+                                <tr><td colspan="6" class="text-center text-muted py-4">Loading...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="table-footer" id="reportsPagination"></div>
+                </div>
+            </div>
+
+        </div><!-- /admin-content -->
+    </div><!-- /admin-main -->
+</div><!-- /admin-layout -->
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>Chart.defaults.color = '#abb8b0'; Chart.defaults.font.family = "'Outfit', sans-serif";</script>
+<script src="js/auth.js"></script>
+<script src="js/admin.js"></script>
+
+</body>
+</html>

@@ -23,6 +23,14 @@
       "dest": "/$1"
     },
     {
+      "src": "/login.html",
+      "dest": "/login.html"
+    },
+    {
+      "src": "/admin.html",
+      "dest": "/admin.html"
+    },
+    {
       "src": "/(.*)",
       "dest": "/index.html"
     }

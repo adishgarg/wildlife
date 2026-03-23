@@ -1,6 +1,9 @@
 document.addEventListener("DOMContentLoaded", () => {
     const API_BASE = (window.location.hostname === '127.0.0.1' && window.location.port !== '3000') || window.location.protocol === 'file:' ? 'http://localhost:3000' : '';
 
+    // Update navbar auth state
+    if (typeof Auth !== 'undefined') Auth.initNavbar();
+
     // 1. Initialize Map (Leaflet)
     // Coords approximately near a forest area in India (e.g., Bandipur/Mudumalai region)
     const map = L.map('map').setView([11.6603, 76.6260], 10);
